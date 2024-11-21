@@ -3,8 +3,12 @@
 #![feature(custom_test_frameworks)]
 #![test_runner(rusty_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
+#![feature(abi_x86_interrupt)]
 
-use rusty_os::println;
+pub mod interrupts;
+pub mod gdt;
+
+use rusty_os::{init, println};
 use core::panic::PanicInfo;
 
 #[cfg(not(test))]
@@ -23,9 +27,17 @@ fn panic(info: &PanicInfo) -> ! {
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     println!("Hello World!");
+    init();
+
+    fn stack_overflow() {
+        stack_overflow();
+    }
+
+    stack_overflow();
 
     #[cfg(test)]
     test_main();
 
+    println!("This didn't reboot!");
     loop{}
 }
