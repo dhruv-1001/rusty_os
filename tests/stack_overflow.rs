@@ -3,9 +3,9 @@
 #![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
-use rusty_os::{exit_qemu, serial_print, serial_println, QemuExitCode};
-use x86_64::structures::idt::{InterruptStackFrame, InterruptDescriptorTable};
 use lazy_static::lazy_static;
+use rusty_os::{exit_qemu, serial_print, serial_println, QemuExitCode};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {

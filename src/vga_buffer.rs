@@ -1,7 +1,7 @@
 use core::fmt;
-use volatile::Volatile;
 use lazy_static::lazy_static;
 use spin::Mutex;
+use volatile::Volatile;
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -39,7 +39,7 @@ impl ColorCode {
 #[repr(C)]
 struct ScreenChar {
     ascii_character: u8,
-    color_code: ColorCode
+    color_code: ColorCode,
 }
 
 const BUFFER_HEIGHT: usize = 25;
@@ -47,13 +47,13 @@ const BUFFER_WIDTH: usize = 80;
 
 #[repr(transparent)]
 struct Buffer {
-    chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT]
+    chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
 pub struct Writer {
     column_position: usize,
     color_code: ColorCode,
-    buffer: &'static mut Buffer
+    buffer: &'static mut Buffer,
 }
 
 impl Writer {
@@ -67,11 +67,11 @@ impl Writer {
 
                 let row = BUFFER_HEIGHT - 1;
                 let col = self.column_position;
-                
+
                 let color_code = self.color_code;
                 self.buffer.chars[row][col].write(ScreenChar {
                     ascii_character: byte,
-                    color_code
+                    color_code,
                 });
 
                 self.column_position += 1;

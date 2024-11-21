@@ -5,11 +5,11 @@
 #![reexport_test_harness_main = "test_main"]
 #![feature(abi_x86_interrupt)]
 
-pub mod interrupts;
 pub mod gdt;
+pub mod interrupts;
 
-use rusty_os::{init, println};
 use core::panic::PanicInfo;
+use rusty_os::{init, println};
 
 #[cfg(not(test))]
 #[panic_handler]
@@ -39,5 +39,5 @@ pub extern "C" fn _start() -> ! {
     test_main();
 
     println!("This didn't reboot!");
-    loop{}
+    loop {}
 }
