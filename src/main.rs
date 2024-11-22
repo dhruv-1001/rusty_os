@@ -9,13 +9,13 @@ pub mod gdt;
 pub mod interrupts;
 
 use core::panic::PanicInfo;
-use rusty_os::{init, println};
+use rusty_os::{print, println};
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    rusty_os::hlt_loop();
 }
 
 #[cfg(test)]
@@ -27,17 +27,11 @@ fn panic(info: &PanicInfo) -> ! {
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     println!("Hello World!");
-    init();
-
-    fn stack_overflow() {
-        stack_overflow();
-    }
-
-    stack_overflow();
+    rusty_os::init();
 
     #[cfg(test)]
     test_main();
 
     println!("This didn't reboot!");
-    loop {}
+    rusty_os::hlt_loop();
 }
